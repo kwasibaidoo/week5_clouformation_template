@@ -345,9 +345,6 @@ Resources:
     Type: AWS::ECR::PublicRepository
     Properties:
       RepositoryName: !Sub '${EnvironmentName}-repository'
-      RepositoryCatalogData:
-        # Remove the Description key, if present
-        DisplayName: !Sub '${EnvironmentName} Web Application Repository'
       RepositoryPolicyText:
         Version: '2012-10-17'
         Statement:
