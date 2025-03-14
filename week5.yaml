@@ -340,14 +340,14 @@ Resources:
             Resource:
               - !Sub 'arn:aws:s3:::${ImagesBucket}'
               - !Sub 'arn:aws:s3:::${ImagesBucket}/*'
-
   # ECR Repository - Public
   ECRRepository:
     Type: AWS::ECR::PublicRepository
     Properties:
       RepositoryName: !Sub '${EnvironmentName}-repository'
       RepositoryCatalogData:
-        Description: !Sub 'Public repository for ${EnvironmentName} web application'
+        # Remove the Description key, if present
+        DisplayName: !Sub '${EnvironmentName} Web Application Repository'
       RepositoryPolicyText:
         Version: '2012-10-17'
         Statement:
@@ -362,6 +362,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub '${EnvironmentName}-ECR-Public'
+
 
   # ECS Task Execution Role
   ECSTaskExecutionRole:
