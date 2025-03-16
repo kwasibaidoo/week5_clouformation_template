@@ -284,7 +284,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: !Sub '${EnvironmentName}-TargetGroup'
-      Port: 80
+      Port: 5000
       Protocol: HTTP
       VpcId: !Ref VPC
       TargetType: ip
@@ -292,6 +292,7 @@ Resources:
       HealthCheckIntervalSeconds: 30
       HealthCheckPath: /
       HealthCheckProtocol: HTTP
+      HealthCheckPort: '5000'
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
@@ -442,6 +443,9 @@ Resources:
             - ContainerPort: 80
               HostPort: 80
               Protocol: tcp
+            - ContainerPort: 5000
+              HostPort: 5000
+              Protocol: tcp
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -456,7 +460,7 @@ Resources:
           HealthCheck:
             Command:
               - CMD-SHELL
-              - curl -f http://localhost/ || exit 1
+              - curl -f http://localhost:5000/ || exit 1
             Interval: 30
             Timeout: 5
             Retries: 3
@@ -543,7 +547,7 @@ Resources:
             - !Ref PrivateSubnet2
       LoadBalancers:
         - ContainerName: !Sub '${EnvironmentName}-container'
-          ContainerPort: 80
+          ContainerPort: 5000
           TargetGroupArn: !Ref ALBTargetGroup
       HealthCheckGracePeriodSeconds: 60
       DeploymentConfiguration:
