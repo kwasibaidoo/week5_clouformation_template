@@ -255,8 +255,8 @@ Resources:
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 0
-          ToPort: 65535
+          FromPort: 5000
+          ToPort: 5000
           SourceSecurityGroupId: !Ref ALBSecurityGroup
       Tags:
         - Key: Name
@@ -273,6 +273,7 @@ Resources:
       SecurityGroups:
         - !Ref ALBSecurityGroup
       Scheme: internet-facing
+      Type: application
       LoadBalancerAttributes:
         - Key: idle_timeout.timeout_seconds
           Value: '60'
@@ -440,9 +441,6 @@ Resources:
           Image: !Ref InitialContainerImage
           Essential: true
           PortMappings:
-            - ContainerPort: 80
-              HostPort: 80
-              Protocol: tcp
             - ContainerPort: 5000
               HostPort: 5000
               Protocol: tcp
@@ -539,7 +537,7 @@ Resources:
         Type: CODE_DEPLOY
       NetworkConfiguration:
         AwsvpcConfiguration:
-          AssignPublicIp: DISABLED
+          AssignPublicIp: ENABLED
           SecurityGroups:
             - !Ref ECSSecurityGroup
           Subnets:
