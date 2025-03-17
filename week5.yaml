@@ -36,13 +36,14 @@ Parameters:
   InitialContainerImage:
     Description: Initial container image to use (should be a valid public image)
     Type: String
-    Default: 'public.ecr.aws/e2h5u6h2/image-uploader-app:latest'
+    # Default: 'public.ecr.aws/e2h5u6h2/image-uploader-app:latest'
+    Default: 'amazon/amazon-ecs-sample'
 
   # Add deployment toggle parameter
   DeployService:
     Description: Whether to deploy the ECS service (set to false for initial infrastructure)
     Type: String
-    Default: 'false'
+    Default: 'true'
     AllowedValues:
       - 'true'
       - 'false'
@@ -362,6 +363,7 @@ Resources:
               - s3:GetObject
               - s3:PutObject
               - s3:ListBucket
+              - s3:DeleteObject
             Resource:
               - !Sub 'arn:aws:s3:::${ImagesBucket}'
               - !Sub 'arn:aws:s3:::${ImagesBucket}/*'
@@ -472,7 +474,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: !Sub '${EnvironmentName}-green-tg'
-      Port: 80
+      Port: 5000
       Protocol: HTTP
       VpcId: !Ref VPC
       TargetType: ip
@@ -480,6 +482,7 @@ Resources:
       HealthCheckIntervalSeconds: 30
       HealthCheckPath: /
       HealthCheckProtocol: HTTP
+      HealthCheckPort: '5000'
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
