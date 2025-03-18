@@ -36,14 +36,13 @@ Parameters:
   InitialContainerImage:
     Description: Initial container image to use (should be a valid public image)
     Type: String
-    # Default: 'public.ecr.aws/e2h5u6h2/image-uploader-app:latest'
-    Default: 'amazon/amazon-ecs-sample'
+    Default: 'public.ecr.aws/e2h5u6h2/image-uploader-app:latest'
 
   # Add deployment toggle parameter
   DeployService:
     Description: Whether to deploy the ECS service (set to false for initial infrastructure)
     Type: String
-    Default: 'true'
+    Default: 'false'
     AllowedValues:
       - 'true'
       - 'false'
@@ -369,24 +368,24 @@ Resources:
               - !Sub 'arn:aws:s3:::${ImagesBucket}/*'
               
   # ECR Repository - Public
-  ECRRepository:
-    Type: AWS::ECR::PublicRepository
-    Properties:
-      RepositoryName: !Sub '${EnvironmentName}-repository'
-      RepositoryPolicyText:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal: '*'
-            Action:
-              - 'ecr-public:BatchGetImage'
-              - 'ecr-public:GetDownloadUrlForLayer'
-            Condition:
-              StringEquals:
-                'aws:PrincipalOrgID': '*'
-      Tags:
-        - Key: Name
-          Value: !Sub '${EnvironmentName}-ECR-Public'
+  # ECRRepository:
+  #   Type: AWS::ECR::PublicRepository
+  #   Properties:
+  #     RepositoryName: !Sub '${EnvironmentName}-repository'
+  #     RepositoryPolicyText:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal: '*'
+  #           Action:
+  #             - 'ecr-public:BatchGetImage'
+  #             - 'ecr-public:GetDownloadUrlForLayer'
+  #           Condition:
+  #             StringEquals:
+  #               'aws:PrincipalOrgID': '*'
+  #     Tags:
+  #       - Key: Name
+  #         Value: !Sub '${EnvironmentName}-ECR-Public'
 
   # ECS Task Execution Role
   ECSTaskExecutionRole:
@@ -676,11 +675,11 @@ Outputs:
     Export:
       Name: !Sub '${EnvironmentName}-S3BucketName'
 
-  ECRRepositoryUri:
-    Description: URI of the Public ECR Repository
-    Value: !Sub 'public.ecr.aws/${ECRRepository}'
-    Export:
-      Name: !Sub '${EnvironmentName}-ECRRepositoryUri'
+  # ECRRepositoryUri:
+  #   Description: URI of the Public ECR Repository
+  #   Value: !Sub 'public.ecr.aws/${ECRRepository}'
+  #   Export:
+  #     Name: !Sub '${EnvironmentName}-ECRRepositoryUri'
 
   DeploymentEnabled:
     Description: Whether the ECS service is deployed
