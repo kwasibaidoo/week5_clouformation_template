@@ -533,7 +533,6 @@ Resources:
       ServiceName: !Sub '${EnvironmentName}-service'
       Cluster: !Ref ECSCluster
       TaskDefinition: !Ref WebAppTaskDefinition
-      LaunchType: FARGATE
       DesiredCount: 2
       DeploymentController:
         Type: CODE_DEPLOY
