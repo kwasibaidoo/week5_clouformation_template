@@ -565,6 +565,9 @@ Resources:
       DeploymentGroupName: !Sub '${EnvironmentName}-deploy-group'
       DeploymentConfigName: CodeDeployDefault.ECSAllAtOnce
       ServiceRoleArn: !GetAtt CodeDeployServiceRole.Arn
+      DeploymentStyle: # Add this block
+        DeploymentType: BLUE_GREEN
+        DeploymentOption: WITH_TRAFFIC_CONTROL
       BlueGreenDeploymentConfiguration:
         DeploymentReadyOption:
           ActionOnTimeout: CONTINUE_DEPLOYMENT
